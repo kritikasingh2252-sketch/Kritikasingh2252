@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Banking</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body { font-family: Arial; background: #1a1a2e; display: flex; justify-content: center; align-items: center; height: 100vh; margin:0; }
+        .box { background: #16213e; padding: 30px; border-radius: 8px; color: #e94560; text-align: center; width: 350px; }
+        input { padding: 10px; margin: 10px; width: 80%; border-radius:4px; border:none; }
+        button { background: #e94560; border: none; padding: 12px 25px; color: white; cursor: pointer; border-radius:4px; font-size:16px; }
+        #main { display: none; }
+    </style>
+</head>
+<body>
+<div class="box" id="keyBox">
+    <h2>🔑 Enter Key</h2>
+    <input type="password" id="keyInput" placeholder="Decryption Key"><br>
+    <button onclick="decryptPage()">Unlock</button>
+</div>
+
+<div id="main"></div>
+
+<script>
+// PASTE_YOUR_GENERATED_CIPHERTEXT_HERE
+const ciphertext = "U2FsdGVkX1/KjV8p..."; 
+
+function decryptPage() {
+    const key = document.getElementById("keyInput").value;
+    try {
+        const bytes = CryptoJS.AES.decrypt(ciphertext, key);
+        const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+        if (!decrypted || decrypted.indexOf("<!DOCTYPE") === -1) throw new Error();
+        document.getElementById("main").innerHTML = decrypted;
+        document.getElementById("main").style.display = "block";
+        document.getElementById("keyBox").style.display = "none";
+    } catch(e) {
+        alert("Invalid key or corrupted data.");
+    }
+}
+</script>
+</body>
+</html>
